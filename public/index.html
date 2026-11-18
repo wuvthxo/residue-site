@@ -67,8 +67,8 @@
   .bg { position: fixed; inset: 0; z-index: -1; pointer-events: none;
     background: radial-gradient(ellipse 75% 70% at 50% 45%, var(--green) 0%, #13210f 45%, var(--black) 100%); }
   .noise { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; image-rendering: pixelated; }
-  .noise.bgc { z-index: -1; mix-blend-mode: overlay; opacity: 0.75; }
-  .noise.bgf { z-index: -1; mix-blend-mode: soft-light; opacity: 0.6; image-rendering: auto; }
+  .noise.bgc { z-index: -1; mix-blend-mode: overlay; opacity: 0.55; }
+  .noise.bgf { z-index: -1; mix-blend-mode: soft-light; opacity: 0.45; image-rendering: auto; }
   .vignette { position: fixed; inset: 0; z-index: -1; pointer-events: none;
     background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.6) 100%); }
   /* no z-index here: a stacking context would stop the hero static from blending with the page behind it */
@@ -76,8 +76,8 @@
 
   /* hero: static runs over the wordmark too, like the profile picture */
   .hero { position: relative; min-height: 100svh; display: grid; place-items: center; padding: 96px var(--gutter) 120px; text-align: center; }
-  .hero .over { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; image-rendering: pixelated; mix-blend-mode: overlay; opacity: 0.9; }
-  .hero .over.f { mix-blend-mode: soft-light; opacity: 0.8; image-rendering: auto; }
+  .hero .over { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; image-rendering: pixelated; mix-blend-mode: overlay; opacity: 0.7; }
+  .hero .over.f { mix-blend-mode: soft-light; opacity: 0.6; image-rendering: auto; }
   .hero-inner { width: min(100%, 1100px); }
   h1 { font-size: 0; line-height: 0; }
   .mark { display: block; width: 100%; height: auto; overflow: visible; filter: drop-shadow(0 0 2.5vw rgba(150, 200, 90, 0.18)); }
@@ -262,8 +262,8 @@
   const mq = matchMedia("(prefers-reduced-motion: reduce)");
   const FRAMES = 6; // noise is pre-rendered once per resize, then cycled
   const src = [
-    { el: document.getElementById("nc"), scale: 1.5, amp: 140 },
-    { el: document.getElementById("nf"), scale: 1, amp: 100 },
+    { el: document.getElementById("nc"), scale: 1.5, amp: 90 },
+    { el: document.getElementById("nf"), scale: 1, amp: 65 },
   ];
   const copies = [document.getElementById("hc"), document.getElementById("hf")];
   function render(L) {
