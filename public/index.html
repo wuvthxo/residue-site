@@ -262,8 +262,8 @@
   const mq = matchMedia("(prefers-reduced-motion: reduce)");
   const FRAMES = 6; // noise is pre-rendered once per resize, then cycled
   const src = [
-    { el: document.getElementById("nc"), scale: 3, amp: 170 },
-    { el: document.getElementById("nf"), scale: 2, amp: 130 },
+    { el: document.getElementById("nc"), scale: 1.5, amp: 140 },
+    { el: document.getElementById("nf"), scale: 1, amp: 100 },
   ];
   const copies = [document.getElementById("hc"), document.getElementById("hf")];
   function render(L) {
