@@ -1,0 +1,10 @@
+{
+  "name": "residue-site",
+  "main": "src/index.js",
+  "compatibility_date": "2026-11-01",
+  "assets": { "directory": "./public", "binding": "ASSETS", "run_worker_first": true },
+  "routes": [
+    { "pattern": "residuefw.org", "custom_domain": true },
+    { "pattern": "www.residuefw.org", "custom_domain": true }
+  ]
+}
