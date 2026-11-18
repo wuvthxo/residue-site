@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>RESIDUE.</title>
+<title>RESIDUE. | A Fort Wayne docu-series</title>
 <meta name="description" content="RESIDUE. is an independent docu-series about growing up in Fort Wayne, Indiana. Young people from here, in their own words.">
 <meta name="theme-color" content="#070E08">
 <link rel="canonical" href="https://residuefw.org/">
@@ -30,81 +30,292 @@
 
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Courier+Prime:ital,wght@0,400;0,700;1,700&display=swap" rel="stylesheet">
 <style>
   :root {
     --black: #070E08;
+    --night: #1C3016;
     --green: #2C4620;
     --cream: #F0E3B3;
+    --cream-dim: #CFC49A;
+    --orange: #C8702A;
+    --orange-text: #EE9A50; /* brand orange lightened so small text passes 4.5:1 near the glow */
     --red: #A62D2E;
+    --head: Impact, "Anton", "Haettenschweiler", "Arial Narrow Bold", sans-serif;
+    --mono: "Courier Prime", "Courier New", monospace;
+    --gutter: clamp(20px, 5vw, 64px);
+    --measure: 34rem;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { height: 100%; }
+  html { background: var(--black); scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  @media (forced-colors: active) { .noise, .over, .vignette, .bg { display: none; } .cta { border-color: ButtonText; } }
   body {
-    background: var(--black);
-    background-image: radial-gradient(ellipse 75% 70% at 50% 50%, var(--green) 0%, #13210f 45%, var(--black) 100%);
     color: var(--cream);
-    overflow: hidden;
-    display: grid;
-    place-items: center;
+    font: 400 1.125rem/1.6 var(--mono);
     min-height: 100svh;
   }
-  main { width: min(86vw, 1100px); padding: 0 16px; position: relative; z-index: 1; }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--orange-text); outline-offset: 4px; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .skip { position: absolute; left: 16px; top: -100px; z-index: 10; background: var(--cream); color: var(--black); padding: 12px 16px; font-weight: 700; }
+  .skip:focus { top: 16px; }
+
+  /* the glow + static sit behind every section */
+  .bg { position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background: radial-gradient(ellipse 75% 70% at 50% 45%, var(--green) 0%, #13210f 45%, var(--black) 100%); }
+  .noise { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; image-rendering: pixelated; }
+  .noise.bgc { z-index: -1; mix-blend-mode: overlay; opacity: 0.75; }
+  .noise.bgf { z-index: -1; mix-blend-mode: soft-light; opacity: 0.6; image-rendering: auto; }
+  .vignette { position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.6) 100%); }
+  /* no z-index here: a stacking context would stop the hero static from blending with the page behind it */
+  main, footer { position: relative; }
+
+  /* hero: static runs over the wordmark too, like the profile picture */
+  .hero { position: relative; min-height: 100svh; display: grid; place-items: center; padding: 96px var(--gutter) 120px; text-align: center; }
+  .hero .over { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; image-rendering: pixelated; mix-blend-mode: overlay; opacity: 0.9; }
+  .hero .over.f { mix-blend-mode: soft-light; opacity: 0.8; image-rendering: auto; }
+  .hero-inner { width: min(100%, 1100px); }
   h1 { font-size: 0; line-height: 0; }
-  .mark { display: block; width: 100%; height: auto; overflow: visible;
-    filter: drop-shadow(0 0 2.5vw rgba(150, 200, 90, 0.18)); }
+  .mark { display: block; width: 100%; height: auto; overflow: visible; filter: drop-shadow(0 0 2.5vw rgba(150, 200, 90, 0.18)); }
   .word { fill: var(--cream); }
   .dot { fill: var(--red); }
-  /* animated static, laid over everything (text included) like the pfp */
-  canvas { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2;
-    image-rendering: pixelated; mix-blend-mode: overlay; opacity: 0.9; }
-  canvas.fine { mix-blend-mode: soft-light; opacity: 0.8; image-rendering: auto; }
-  .vignette { position: fixed; inset: 0; pointer-events: none; z-index: 3;
-    background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.55) 100%); }
+  .hero .tagline, .hero .status, .hero .cta, .hero .scroll { position: relative; z-index: 1; }
+  .tagline { margin: clamp(20px, 3vw, 36px) auto 0; font-size: clamp(1.05rem, 2.2vw, 1.5rem); font-weight: 700; max-width: 30ch; }
+  .status { margin-top: 18px; font: 700 0.875rem/1.4 var(--mono); letter-spacing: 0.2em; text-transform: uppercase; color: var(--orange-text); }
+  .status span { white-space: nowrap; }
+  @media (max-width: 480px) { .status { letter-spacing: 0.12em; } }
+  .hero .cta { margin-top: clamp(28px, 4vw, 40px); }
+  .hero .scroll { position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); font-size: 1rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--cream); text-decoration: none; padding: 12px; }
+  .scroll:hover { color: var(--orange-text); }
+
+  /* buttons: square, solid, at least 48px tall */
+  .cta { display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 52px; padding: 14px 28px;
+    background: var(--cream); color: var(--black); font: 400 1.25rem/1 var(--head); letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none;
+    border: 2px solid var(--cream); transition: background-color .15s, color .15s; }
+  .cta:hover { background: var(--orange); border-color: var(--orange); color: var(--black); }
+  .cta .arrow { font-family: var(--mono); font-weight: 700; }
+
+  section.block { padding: clamp(72px, 12vw, 160px) var(--gutter); }
+  .wrap { max-width: 1100px; margin: 0 auto; }
+  /* slate label: orange rule from the carousels + numbered tag */
+  .label { font: 700 0.875rem/1 var(--mono); letter-spacing: 0.22em; text-transform: uppercase; color: var(--orange-text); margin-bottom: 20px; }
+  .label::before { content: ""; display: block; width: 56px; height: 4px; background: var(--orange); margin-bottom: 14px; }
+  .p { color: var(--red); }
+  h2 { font: 400 clamp(2.75rem, 8.5vw, 6.5rem)/0.98 var(--head); text-transform: uppercase; letter-spacing: 0.005em; margin-bottom: clamp(28px, 4vw, 48px); }
+  .prose { max-width: var(--measure); }
+  .prose p + p { margin-top: 1.1em; }
+  .prose .lead { font-size: clamp(1.25rem, 2.4vw, 1.6rem); font-weight: 700; line-height: 1.45; }
+  .accent { color: var(--orange-text); font-weight: 700; }
+
+  /* casting */
+  .casting { border-top: 2px solid var(--green); border-bottom: 2px solid var(--green); background: rgba(7, 14, 8, 0.55); }
+  .casting .grid { display: grid; gap: clamp(40px, 6vw, 80px); grid-template-columns: 1fr; }
+  @media (min-width: 900px) { .casting .grid { grid-template-columns: 1.2fr 1fr; align-items: start; } .terms { position: sticky; top: 88px; } }
+  .casting .cta { margin-top: 36px; }
+  .after { margin-top: 16px; font-size: 1rem; color: var(--cream-dim); max-width: var(--measure); }
+  .terms { list-style: none; border-left: 3px solid var(--orange); padding-left: 24px; }
+  .terms li { padding: 14px 0; border-bottom: 1px solid rgba(240, 227, 179, 0.15); font-size: 1.0625rem; }
+  .terms li:last-child { border-bottom: 0; }
+  .terms strong { display: block; font: 400 1.4rem/1.1 var(--head); text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 4px; }
+
+  /* episodes */
+  /* tracklist, like the back of an album */
+  .eps { list-style: none; max-width: 46rem; }
+  .eps li { display: flex; align-items: baseline; gap: 20px; padding: 18px 0; border-top: 2px solid var(--green); }
+  .eps li:last-child { border-bottom: 2px solid var(--green); }
+  .eps .num { font: 700 1rem/1 var(--mono); color: var(--orange-text); min-width: 3ch; letter-spacing: 0.08em; }
+  .eps .t { font: 400 clamp(1.5rem, 3vw, 2.25rem)/1.05 var(--head); text-transform: uppercase; letter-spacing: 0.01em; }
+
+  .close { text-align: center; }
+  .close h2 { margin-bottom: 0; }
+
+  /* contact + footer */
+  .contact .rows { display: grid; gap: 24px; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .contact .rows { grid-template-columns: 1fr 1fr; } }
+  .contact a.big { display: inline-block; font: 400 clamp(1.6rem, 4vw, 2.6rem)/1.15 var(--head); text-decoration: none; border-bottom: 3px solid var(--orange); padding: 6px 0; overflow-wrap: anywhere; }
+  .contact a.big:hover { color: var(--orange); }
+  .contact p { color: var(--cream-dim); margin-bottom: 8px; }
+
+  footer { padding: 48px var(--gutter) 56px; border-top: 2px solid var(--green); background: rgba(7, 14, 8, 0.75); font-size: 1rem; }
+  footer .wrap { display: grid; gap: 20px; }
+  footer .help { font-weight: 700; }
+  footer .help a { color: var(--orange-text); }
+  footer .row { display: flex; flex-wrap: wrap; gap: 12px 28px; align-items: center; justify-content: space-between; color: var(--cream-dim); }
+  .toggle { position: absolute; top: 16px; right: 16px; z-index: 5; background: rgba(7, 14, 8, 0.6); border: 1px solid rgba(240, 227, 179, 0.35); color: var(--cream-dim); font: 700 0.875rem/1 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; min-height: 44px; padding: 0 16px; cursor: pointer; }
+  .toggle:hover { color: var(--cream); border-color: var(--cream); }
 </style>
 </head>
 <body>
+<a class="skip" href="#casting">Skip to the interview form</a>
+<button class="toggle" id="toggle" type="button">Pause static</button>
+<div class="bg" aria-hidden="true"></div>
+<canvas class="noise bgc" id="nc" aria-hidden="true"></canvas>
+<canvas class="noise bgf" id="nf" aria-hidden="true"></canvas>
+<div class="vignette" aria-hidden="true"></div>
+
 <main>
-  <h1><svg class="mark" viewBox="84 -1653 6963 1687" role="img" aria-label="RESIDUE." xmlns="http://www.w3.org/2000/svg">
+  <header class="hero">
+    <canvas class="over" id="hc" aria-hidden="true"></canvas>
+    <canvas class="over f" id="hf" aria-hidden="true"></canvas>
+    <div class="hero-inner">
+      <h1><span class="sr">RESIDUE. A docu-series about growing up in Fort Wayne.</span><svg class="mark" viewBox="84 -1653 6963 1687" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
   <path class="word" d="M84 -1619H382Q680 -1619 785.5 -1596.0Q891 -1573 957.5 -1478.5Q1024 -1384 1024 -1177Q1024 -988 977.0 -923.0Q930 -858 792 -845Q917 -814 960.0 -762.0Q1003 -710 1013.5 -666.5Q1024 -623 1024 -427V0H633V-538Q633 -668 612.5 -699.0Q592 -730 505 -730V0H84ZM505 -1342V-982Q576 -982 604.5 -1001.5Q633 -1021 633 -1128V-1217Q633 -1294 605.5 -1318.0Q578 -1342 505 -1342Z M1187 -1619H1889V-1295H1608V-988H1871V-680H1608V-324H1917V0H1187Z M2930 -1129H2539V-1249Q2539 -1333 2524.0 -1356.0Q2509 -1379 2474 -1379Q2436 -1379 2416.5 -1348.0Q2397 -1317 2397 -1254Q2397 -1173 2419 -1132Q2440 -1091 2538 -1033Q2819 -866 2892 -759Q2965 -652 2965 -414Q2965 -241 2924.5 -159.0Q2884 -77 2768.0 -21.5Q2652 34 2498 34Q2329 34 2209.5 -30.0Q2090 -94 2053.0 -193.0Q2016 -292 2016 -474V-580H2407V-383Q2407 -292 2423.5 -266.0Q2440 -240 2482 -240Q2524 -240 2544.5 -273.0Q2565 -306 2565 -371Q2565 -514 2526 -558Q2486 -602 2329 -705Q2172 -809 2121.0 -856.0Q2070 -903 2036.5 -986.0Q2003 -1069 2003 -1198Q2003 -1384 2050.5 -1470.0Q2098 -1556 2204.0 -1604.5Q2310 -1653 2460 -1653Q2624 -1653 2739.5 -1600.0Q2855 -1547 2892.5 -1466.5Q2930 -1386 2930 -1193Z M3518 -1619V0H3097V-1619Z M3687 -1619H4002Q4307 -1619 4414.5 -1591.0Q4522 -1563 4578.0 -1499.0Q4634 -1435 4648.0 -1356.5Q4662 -1278 4662 -1048V-481Q4662 -263 4641.5 -189.5Q4621 -116 4570.0 -74.5Q4519 -33 4444.0 -16.5Q4369 0 4218 0H3687ZM4108 -1342V-277Q4199 -277 4220.0 -313.5Q4241 -350 4241 -512V-1141Q4241 -1251 4234.0 -1282.0Q4227 -1313 4202.0 -1327.5Q4177 -1342 4108 -1342Z M5776 -1619V-537Q5776 -353 5764.0 -278.5Q5752 -204 5693.0 -125.5Q5634 -47 5537.5 -6.5Q5441 34 5310 34Q5165 34 5054.0 -14.0Q4943 -62 4888.0 -139.0Q4833 -216 4823.0 -301.5Q4813 -387 4813 -661V-1619H5234V-405Q5234 -299 5245.5 -269.5Q5257 -240 5292 -240Q5332 -240 5343.5 -272.5Q5355 -305 5355 -426V-1619Z M5939 -1619H6641V-1295H6360V-988H6623V-680H6360V-324H6669V0H5939Z"/>
   <path class="dot" d="M7047 -330V0H6742V-330Z"/>
 </svg></h1>
+      <p class="tagline" aria-hidden="true">A docu-series about growing up in Fort Wayne.</p>
+      <p class="status"><span>8 episodes</span> / <span>Now casting</span> / <span>Fort Wayne, IN</span></p>
+      <a class="cta" href="https://forms.gle/44876qe4BmCKSXBJ8" target="_blank" rel="noopener">Tell your story <span class="arrow" aria-hidden="true">&#8599;</span><span class="sr"> (opens the interest form in a new tab)</span></a>
+    </div>
+    <a class="scroll" href="#about" aria-label="Scroll to what RESIDUE. is">What it is <span aria-hidden="true">&#8595;</span></a>
+  </header>
+
+  <section class="block" id="about" aria-labelledby="about-h">
+    <div class="wrap">
+      <p class="label">01 / The series</p>
+      <h2 id="about-h">What is RESIDUE<span class="p">.</span></h2>
+      <div class="prose">
+        <p class="lead">RESIDUE<span class="p">.</span> is an independent docu-series about growing up in Fort Wayne, Indiana.</p>
+        <p>Young people from here sit down and tell it in their own words. The block, the school, the parties, the fights.</p>
+        <p>Eight short episodes on what we had to survive on our own.</p>
+        <p class="accent">And what it all leaves behind.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="episodes" aria-labelledby="eps-h">
+    <div class="wrap">
+      <p class="label">02 / What we're asking</p>
+      <h2 id="eps-h">8 episodes.</h2>
+      <ol class="eps" role="list">
+        <li><span class="num" aria-hidden="true">01</span> <span class="t">Where Are We From?</span></li>
+        <li><span class="num" aria-hidden="true">02</span> <span class="t">You Learn Young</span></li>
+        <li><span class="num" aria-hidden="true">03</span> <span class="t">The First Time</span></li>
+        <li><span class="num" aria-hidden="true">04</span> <span class="t">Survival</span></li>
+        <li><span class="num" aria-hidden="true">05</span> <span class="t">Nobody Was Coming</span></li>
+        <li><span class="num" aria-hidden="true">06</span> <span class="t">Who Are You Becoming?</span></li>
+        <li><span class="num" aria-hidden="true">07</span> <span class="t">Would You Raise a Child Here?</span></li>
+        <li><span class="num" aria-hidden="true">08</span> <span class="t">What Happens Now?</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="block casting" id="casting" aria-labelledby="casting-h">
+    <div class="wrap grid">
+      <div>
+        <p class="label">03 / Now casting</p>
+        <h2 id="casting-h">We're looking for people to interview.</h2>
+        <div class="prose">
+          <p class="lead">Grew up here? Live here now? We want to sit down with you.</p>
+          <p>A real conversation, on camera, no script. Only what you're comfortable sharing.</p>
+        </div>
+        <a class="cta" href="https://forms.gle/44876qe4BmCKSXBJ8" target="_blank" rel="noopener">Tell your story <span class="arrow" aria-hidden="true">&#8599;</span><span class="sr"> (opens the interest form in a new tab)</span></a>
+        <p class="after">Takes a few minutes. Your name is optional. Only leave your @ or number if you want an interview.</p>
+      </div>
+      <ul class="terms" role="list" aria-label="How it works">
+        <li><strong>Voluntary</strong>Taking part is your choice. You can stop at any time.</li>
+        <li><strong>Anonymous form</strong>You don't have to put your name on it.</li>
+        <li><strong>Signed consent</strong>Interviews are only filmed with separate signed consent.</li>
+        <li><strong>Under 18</strong>A parent or guardian needs to sign too.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="block close" aria-labelledby="close-h">
+    <div class="wrap">
+      <h2 id="close-h">Every story leaves<br>something behind.</h2>
+    </div>
+  </section>
+
+  <section class="block contact" id="contact" aria-labelledby="contact-h">
+    <div class="wrap">
+      <p class="label">04 / Contact</p>
+      <h2 id="contact-h">Get in touch.</h2>
+      <div class="rows">
+        <div>
+          <p>Questions, press, or a parent checking in:</p>
+          <a class="big" href="mailto:hello@residuefw.org">hello@residuefw.org</a>
+        </div>
+        <div>
+          <p>Follow along on Instagram:</p>
+          <a class="big" href="https://www.instagram.com/residuefw/" target="_blank" rel="noopener">@residuefw<span class="sr"> (opens in a new tab)</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
-<canvas id="coarse" aria-hidden="true"></canvas>
-<canvas id="fine" class="fine" aria-hidden="true"></canvas>
-<div class="vignette" aria-hidden="true"></div>
+
+<footer>
+  <div class="wrap">
+    <p class="help">If you or someone you know is struggling, call or text <a href="tel:988">988</a>, or chat at <a href="https://988lifeline.org" target="_blank" rel="noopener">988lifeline.org<span class="sr"> (opens in a new tab)</span></a>.</p>
+    <div class="row">
+      <span>&copy; 2026 RESIDUE<span class="p">.</span> Fort Wayne, Indiana.</span>
+    </div>
+  </div>
+</footer>
+
 <script>
 (() => {
-  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  // coarse clumps (scale 3) + fine grain (scale 1.5), redrawn ~18 times a second
-  const layers = [
-    { el: document.getElementById("coarse"), scale: 3, amp: 170 },
-    { el: document.getElementById("fine"), scale: 1.5, amp: 130 },
+  const mq = matchMedia("(prefers-reduced-motion: reduce)");
+  const FRAMES = 6; // noise is pre-rendered once per resize, then cycled
+  const src = [
+    { el: document.getElementById("nc"), scale: 3, amp: 170 },
+    { el: document.getElementById("nf"), scale: 2, amp: 130 },
   ];
+  const copies = [document.getElementById("hc"), document.getElementById("hf")];
+  function render(L) {
+    L.frames = [];
+    for (let f = 0; f < FRAMES; f++) {
+      const img = L.ctx.createImageData(L.el.width, L.el.height);
+      const b = new Uint32Array(img.data.buffer), a = L.amp;
+      for (let k = 0; k < b.length; k++) {
+        const v = Math.max(0, Math.min(255, 128 + ((Math.random() + Math.random() - 1) * a) | 0));
+        b[k] = 0xff000000 | (v << 16) | (v << 8) | v;
+      }
+      L.frames.push(img);
+    }
+  }
   function size() {
-    for (const L of layers) {
+    src.forEach((L, i) => {
       L.el.width = Math.ceil(innerWidth / L.scale);
       L.el.height = Math.ceil(innerHeight / L.scale);
       L.ctx = L.el.getContext("2d");
-      L.img = L.ctx.createImageData(L.el.width, L.el.height);
-      L.buf = new Uint32Array(L.img.data.buffer);
-    }
+      render(L);
+      const c = copies[i];
+      c.width = L.el.width;
+      c.height = Math.ceil(c.offsetHeight / L.scale) || L.el.height;
+      c.ctx = c.getContext("2d");
+    });
   }
+  let n = 0;
   function frame() {
-    for (const L of layers) {
-      const b = L.buf, a = L.amp;
-      for (let i = 0; i < b.length; i++) {
-        const v = 128 + ((Math.random() + Math.random() - 1) * a) | 0;
-        b[i] = 0xff000000 | (v << 16) | (v << 8) | v;
-      }
-      L.ctx.putImageData(L.img, 0, 0);
-    }
+    n = (n + 1 + Math.floor(Math.random() * (FRAMES - 1))) % FRAMES; // skip around so the loop isn't visible
+    src.forEach((L, i) => {
+      L.ctx.putImageData(L.frames[(n + i * 3) % FRAMES], 0, 0);
+      const c = copies[i];
+      for (let y = 0; y < c.height; y += L.el.height) c.ctx.drawImage(L.el, 0, y);
+    });
   }
   size(); frame();
-  addEventListener("resize", () => { size(); frame(); });
-  if (still) return;
+  let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { size(); frame(); }, 150); });
+
+  const btn = document.getElementById("toggle");
+  let stored = null;
+  try { stored = localStorage.getItem("static"); } catch (e) {}
+  let paused = stored ? stored === "off" : mq.matches;
+  const label = () => { btn.textContent = paused ? "Play static" : "Pause static"; };
+  label();
+  btn.addEventListener("click", () => {
+    paused = !paused; label();
+    try { localStorage.setItem("static", paused ? "off" : "on"); } catch (e) {}
+  });
+  mq.addEventListener("change", e => { if (!stored) { paused = e.matches; label(); } });
   let last = 0;
   (function loop(t) {
-    if (t - last > 55) { frame(); last = t; }
+    if (!paused && !document.hidden && t - last > 55) { frame(); last = t; }
     requestAnimationFrame(loop);
   })(0);
 })();
